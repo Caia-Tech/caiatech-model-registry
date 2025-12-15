@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install -U pip
+          pip install -r requirements.txt -r requirements-dev.txt
+
+      - name: Compile
+        run: |
+          python -m py_compile \
+            server.py ingest.py bench.py smoke_test.py qa_report.py concurrency_smoke.py maintenance.py \
+            scripts/pre_release_audit.py test_server.py test_cli.py test_qa_report.py test_maintenance.py
+
+      - name: Smoke test
+        run: |
+          python smoke_test.py
+
+      - name: Pytest
+        env:
+          PYTEST_DISABLE_PLUGIN_AUTOLOAD: "1"
+        run: |
+          python -m pytest -q

@@ -1,0 +1,23 @@
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+.venv/
+venv/
+
+# Local env
+.env
+
+# SQLite / local data
+*.db
+*.sqlite
+*.sqlite3
+*.sqlite*
+
+# QA artifacts
+qa_artifacts/
