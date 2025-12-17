@@ -160,6 +160,50 @@ DB maintenance: `maintenance.py`
 python maintenance.py --db-path ./registry.db --backup ./registry.backup.db --vacuum
 ```
 
+Publish latest training checkpoint (computes sha/size, registers as `experimental` by default): `publish_checkpoint.py`
+
+```bash
+python publish_checkpoint.py \
+  --registry-url http://127.0.0.1:8001 \
+  --api-key dev \
+  --name onyx \
+  --checkpoint-dir "/Users/owner/Desktop/caiatech/models/onyx/checkpoints/2" \
+  --artifact-uri-template "s3://artifacts/{name}/{basename}"
+```
+
+Upload to MinIO first, then register (single command):
+
+```bash
+export AWS_ACCESS_KEY_ID=minioadmin
+export AWS_SECRET_ACCESS_KEY=minioadmin
+python publish_checkpoint.py \
+  --registry-url http://127.0.0.1:8001 \
+  --api-key dev \
+  --name onyx \
+  --checkpoint-path "/Users/owner/Desktop/caiatech/models/onyx/checkpoints/2/checkpoint_step_2500.pt" \
+  --artifact-uri-template "s3://artifacts/{name}/{basename}" \
+  --upload \
+  --s3-endpoint-url http://127.0.0.1:9000 \
+  --skip-upload-if-exists
+```
+
+Auto-publish new checkpoints as they appear:
+
+```bash
+export CAIA_REGISTRY_API_KEY=dev
+export AWS_ACCESS_KEY_ID=minioadmin
+export AWS_SECRET_ACCESS_KEY=minioadmin
+
+python watch_checkpoints.py \
+  --registry-url http://127.0.0.1:8001 \
+  --name onyx \
+  --checkpoint-dir "/Users/owner/Desktop/caiatech/models/onyx/checkpoints/2" \
+  --artifact-uri-template "s3://artifacts/{name}/{basename}" \
+  --upload \
+  --s3-endpoint-url http://127.0.0.1:9000 \
+  --skip-upload-if-exists
+```
+
 ## License
 
 MIT licensed. See `LICENSE`.

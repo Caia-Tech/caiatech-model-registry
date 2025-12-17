@@ -1,0 +1,17 @@
+services:
+  model-registry:
+    build: .
+    environment:
+      CAIA_REGISTRY_API_KEY: ${CAIA_REGISTRY_API_KEY:-dev}
+      CAIA_REGISTRY_DB_PATH: /data/registry.db
+      CAIA_REGISTRY_CORS_ORIGINS: ""
+      CAIA_REGISTRY_ALLOW_LOCAL_PATHS: "0"
+      CAIA_REGISTRY_EXPOSE_LOCAL_PATHS: "0"
+    ports:
+      - "8001:8001"
+    volumes:
+      - registry-data:/data
+
+volumes:
+  registry-data:
+
