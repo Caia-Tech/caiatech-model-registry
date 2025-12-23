@@ -1,0 +1,6 @@
+INFO:     Started server process [12601]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:57636 - "GET /models/1 HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57711 - "POST /models HTTP/1.1" 200 OK
